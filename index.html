@@ -15,8 +15,9 @@ p {
 </head>
 <body>
 
-<p>Cor-she returns in:</p>
-<p id="demo"></p>
+<p id="leading-text"></p>
+<p id="countdown"></p>
+<p id="when"></p>
 
 <script>
 // Set the date we're counting down to
@@ -37,9 +38,11 @@ var x = setInterval(function() {
   var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
   var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-  // Output the result in an element with id="demo"
-  document.getElementById("demo").innerHTML = days + "d " + hours + "h "
+  document.getElementById("leading-text").innerHTML = "Cor-she returns in:";
+  // Output the result in an element with id="countdown"
+  document.getElementById("countdown").innerHTML = days + "d " + hours + "h "
   + minutes + "m " + seconds + "s ";
+  document.getElementById("when").innerHTML = "on Sep 18, 2021 3:00PM";
 
   // If the count down is over, write some text
   if (distance < 0) {
