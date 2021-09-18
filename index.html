@@ -18,6 +18,7 @@ p {
 <p id="leading-text"></p>
 <p id="countdown"></p>
 <p id="when"></p>
+<p id="demo"></p>
 
 <script>
 // Set the date we're counting down to
@@ -47,7 +48,8 @@ var x = setInterval(function() {
   // If the count down is over, write some text
   if (distance < 0) {
     clearInterval(x);
-    document.getElementById("demo").innerHTML = "IS SHE BACK?!? &#128558";
+    document.getElementById("countdown").innerHTML = "0d 0h 0m 0s";
+    document.getElementById("demo").innerHTML = "&#128558 IS SHE BACK?!? &#128558";
   }
 }, 1000); //1000 is in milliseconds so this is 1 second
 </script>
