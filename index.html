@@ -11,6 +11,13 @@ p {
   font-size: 60px;
   margin-top: 0px;
 }
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 10%;
+}
 </style>
 </head>
 <body>
@@ -19,10 +26,10 @@ p {
 <p id="countdown"></p>
 <p id="when"></p>
 <p id="demo"></p>
-
+<img src="mystic party.png" alt="it corshe *gasp*" class="center"/>
 <script>
 // Set the date we're counting down to
-var countDownDate = new Date("Dec 18, 2021 18:15:00").getTime();
+var countDownDate = new Date("Feb 19, 2022 07:00:00").getTime();
 
 // Update the count down every 1 second
 var x = setInterval(function() {
@@ -41,15 +48,15 @@ var x = setInterval(function() {
 
   document.getElementById("leading-text").innerHTML = "Cor-she returns in:";
   // Output the result in an element with id="countdown"
-  document.getElementById("countdown").innerHTML = days + "d " + hours + "h "
-  + minutes + "m " + seconds + "s ";
-  document.getElementById("when").innerHTML = "on Dec 18, 2021 9:00PM";
+  document.getElementById("countdown").innerHTML = "&#128339 " + days + "d " + hours + "h "
+  + minutes + "m " + seconds + "s &#128339";
+  document.getElementById("when").innerHTML = "on Feb 19, 2022 7:00AM";
 
   // If the count down is over, write some text
   if (distance < 0) {
     clearInterval(x);
     document.getElementById("countdown").innerHTML = "0d 0h 0m 0s";
-    document.getElementById("demo").innerHTML = "&#128558 IS SHE BACK?!? &#128558";
+    document.getElementById("demo").innerHTML = "&#127881 &#127874 &#127880 PARTY TIME!!! &#127880 &#127874 &#127881";
   }
 }, 1000); //1000 is in milliseconds so this is 1 second
 </script>
