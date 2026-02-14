@@ -1,0 +1,71 @@
+name: Deploy Countdown
+
+on:
+  workflow_dispatch:
+    inputs:
+      countdown_date:
+        description: 'Date (e.g., "December 25, 2026")'
+        required: true
+        type: string
+      countdown_time:
+        description: 'Time in 24hr format (e.g., "18:00")'
+        required: true
+        type: string
+      event_name:
+        description: 'Event name (e.g., "Cor-she returns")'
+        required: true
+        default: 'Cor-she returns'
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Update countdown date in index.html
+        run: |
+          # Build the full datetime string for JS: "December 25, 2026 18:00:00"
+          FULL_DATE="${{ inputs.countdown_date }} ${{ inputs.countdown_time }}:00"
+
+          # Build display time (12hr format) for the "on ..." line
+          DISPLAY_TIME=$(date -d "2026-01-01 ${{ inputs.countdown_time }}" +"%l:%M%p" 2>/dev/null | xargs)
+
+          # Build display string: "on December 25, 2026 6:00PM"
+          DISPLAY_DATE="on ${{ inputs.countdown_date }} ${DISPLAY_TIME}"
+
+          # Replace the JS Date string
+          sed -i "s|new Date(\".*\").getTime|new Date(\"${FULL_DATE}\").getTime|" index.html
+
+          # Replace the display date line
+          sed -i "s|\.innerHTML = \"on .*\"|.innerHTML = \"${DISPLAY_DATE}\"|" index.html
+
+          # Replace the event name in the leading text
+          sed -i "s|\.innerHTML = \".*returns in:\"|.innerHTML = \"${{ inputs.event_name }} in:\"|" index.html
+
+          echo "Updated countdown to: ${FULL_DATE}"
+          echo "Display date: ${DISPLAY_DATE}"
+          echo "Event: ${{ inputs.event_name }}"
+
+      - name: Commit updated index.html
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet && echo "No changes to commit" || git commit -m "Update countdown: ${{ inputs.event_name }} - ${{ inputs.countdown_date }} ${{ inputs.countdown_time }}"
+          git push
+
+      - name: Deploy to S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+        run: |
+          aws s3 rm "s3://${{ secrets.S3_BUCKET }}" --recursive
+          aws s3 cp index.html "s3://${{ secrets.S3_BUCKET }}/index.html" --content-type "text/html"
+          aws s3 cp "mystic party.png" "s3://${{ secrets.S3_BUCKET }}/mystic party.png" --content-type "image/png"
+          echo "Deployed to s3://${{ secrets.S3_BUCKET }}"
